@@ -2,23 +2,24 @@
 
 function install_public_keys {
 rootfs_path=$1
+name=$2
 
   # install the public keys for the host machine to the container as well
   if [ -f /root/.ssh/authorized_keys ]
   then
-    mkdir -p $rootfs_path/root/.ssh
+    lxc exec $name -- /bin/bash -c "mkdir -p /root/.ssh && touch /root/.ssh/authorized_keys"
     cat /root/.ssh/authorized_keys >> $rootfs_path/root/.ssh/authorized_keys
-    chmod -R 600 $rootfs_path/root/.ssh/authorized_keys
+    lxc exec $name -- /bin/bash -c "chmod -R 600 /root/.ssh/authorized_keys"
   fi
 
   # install the public key for local root login
   if [ -f /root/.ssh/id_rsa.pub ]
   then
+    lxc exec $name -- /bin/bash -c "mkdir -p /root/.ssh && touch /root/.ssh/authorized_keys"
     # add a newline
-    mkdir -p $rootfs_path/root/.ssh
     echo >> $rootfs_path/root/.ssh/authorized_keys
     cat /root/.ssh/id_rsa.pub >> $rootfs_path/root/.ssh/authorized_keys
-    chmod -R 600 $rootfs_path/root/.ssh/authorized_keys
+    lxc exec $name -- /bin/bash -c "chmod -R 600 /root/.ssh/authorized_keys"
   fi
 }
 
@@ -49,7 +50,7 @@ IPv4=$3
   echo ./tunnelport.sh $cid 22
   echo ./initWebproxy.sh $cid www.$name.de
   echo
-  echo To start the container, run: lxc-start -d -n $name
+  echo To start the container, run: lxc start $name
   echo
   echo "To connect to the container locally, run: eval \`ssh-agent\`; ssh-add; ssh root@$IPv4"
 

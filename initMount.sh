@@ -14,6 +14,7 @@ containerpath=/var/lib/lxd/containers/$containername/rootfs/$relativepath
 mountname="${relativepath//\//_}"
 
 mkdir -p $hostpath
+chmod -R a+rwx $hostpath
 rm -Rf $containerpath
 mkdir -p $containerpath
 

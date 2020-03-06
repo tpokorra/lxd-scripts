@@ -56,20 +56,19 @@ echo "export LANG=C" >> $rootfs_path/etc/profile
 
 # install openssh-server
 lxc start $name
-sleep 5
+sleep 10
 lxc exec $name -- /bin/bash -c "dnf -y install openssh-server"
 lxc exec $name -- /bin/bash -c "dnf -y install glibc-locale-source glibc-all-langpacks"
 
 # drop root password completely
 lxc exec $name -- passwd -d root
 # disallow auth with null password
-lxc exec $name -- sed -i 's/nullok//g' /etc/pam.d/system-auth
+lxc exec $name -- /bin/bash -c "sed -i 's/nullok//g' /etc/pam.d/system-auth"
 
-lxc stop $name
+install_public_keys $rootfs_path $name
 
-install_public_keys $rootfs_path
-
-configure_autostart $autostart $rootfs_path
+configure_autostart $autostart $name
 
 info $cid $name $IPv4
 
+lxc stop $name

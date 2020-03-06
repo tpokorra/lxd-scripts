@@ -47,15 +47,19 @@ $SCRIPTSPATH/initMount.sh $hostpath $name "/var/cache/apt"
 # configure timezone
 cd $rootfs_path/etc; rm -f localtime; ln -s ../usr/share/zoneinfo/Europe/Berlin localtime; cd -
 
+lxc start $name
+sleep 5
+
 # install openssh-server
-chroot $rootfs_path apt-get update
-chroot $rootfs_path apt-get install -y openssh-server
+lxc exec $name -- /bin/bash -c "apt-get update && apt-get install -y openssh-server"
 
 # drop root password completely
 chroot $rootfs_path passwd -d root
 
-install_public_keys $rootfs_path
+install_public_keys $rootfs_path $name
 
-configure_autostart $autostart $rootfs_path
+configure_autostart $autostart $name
 
 info $cid $name $IPv4
+
+lxc stop $name

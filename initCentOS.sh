@@ -61,11 +61,10 @@ lxc exec $name -- passwd -d root
 # disallow auth with null password
 lxc exec $name -- sed -i 's/nullok//g' /etc/pam.d/system-auth
 
-lxc stop $name
+install_public_keys $rootfs_path $name
 
-install_public_keys $rootfs_path
-
-configure_autostart $autostart $rootfs_path
+configure_autostart $autostart $name
 
 info $cid $name $IPv4
 
+lxc stop $name
