@@ -1,9 +1,6 @@
 #!/bin/bash
 
-SCRIPTSPATH=`dirname ${BASH_SOURCE[0]}`
-source $SCRIPTSPATH/lib.sh
-
-for d in /var/lib/lxc/*
+for d in /var/lib/lxd/containers/*
 do
   rootfs=$d/rootfs
 
@@ -14,7 +11,7 @@ do
 
   name=`basename $d`
 
-  if [[ -z "`lxc-ls --running $name`" ]]
+  if [[ -z "`lxc list $name | grep RUNNING`" ]]
   then
     state="stopped"
   else
@@ -24,7 +21,7 @@ do
   if [[ "$state" == "running" ]]
   then
     echo "stopping $name ..."
-    lxc-attach -n $name -- poweroff
+    lxc exec $name -- poweroff
   fi
 done
 

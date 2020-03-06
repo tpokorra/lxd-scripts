@@ -6,42 +6,33 @@ These scripts are useful to manage your own server, with several Linux container
 Installation
 ------------
 
-* Either clone this code repository: `cd ~; git clone https://github.com/tpokorra/lxc-scripts.git scripts`
-* Or install a package from LBS: https://lbs.solidcharity.com/package/tpokorra/lbs/lxc-scripts
- * There is a lxc-scripts package for CentOS7, Fedora 22, and Ubuntu 14.04, with instructions how to install the package
- * To make things easier, I usually create a symbolic link: `cd ~; ln -s /usr/share/lxc-scripts scripts`
+* Either clone this code repository: `cd ~; git clone https://github.com/tpokorra/lxd-scripts.git scripts`
+* Or install a package from LBS: https://lbs.solidcharity.com/package/tpokorra/lbs/lxd-scripts
+ * There is a lxd-scripts package for Ubuntu 18.04, with instructions how to install the package
+ * To make things easier, I usually create a symbolic link: `cd ~; ln -s /usr/share/lxd-scripts scripts`
 
-After installing the package, run these scripts for initializing the firewall and some fixes for the LXC templates:
+After installing the package, run these scripts for initializing the firewall and LXD:
 
-    /usr/share/lxc-scripts/initLXC.sh
-    /usr/share/lxc-scripts/initIPTables.sh
+    /usr/share/lxd-scripts/initLXD.sh
+    /usr/share/lxd-scripts/initIPTables.sh
 
-CheatSheet for my LXC scripts
+CheatSheet for my LXD scripts
 ---------------------------------
 
 * Initialise the host IPTables so that they will be survive a reboot: `~/scripts/initIPTables.sh`
-* Small fixes to the LXC system for CentOS7 and Fedora containers, and create ssh keys: `~/scripts/initLXC.sh`
+* Setup of LXD, and create ssh keys: `~/scripts/initLXD.sh`
 * Create a container (with networking etc): `~/scripts/initFedora.sh $name $id`
  * Call the script without parameters to see additional parameters, eg to specify the version of the OS etc: `~/scripts/initFedora.sh`
  * There are scripts for creating Fedora, CentOS, Debian, and Ubuntu containers
-* Containers are created in `/var/lib/lxc/$name`, see the file `config` and the directory `rootfs`
-* Start a container: `lxc-start --name $name`
-* Start a container without console: `lxc-start -d --name $name`
-* Stop a container: `lxc-stop -n $name`
-* Destroy a container: `lxc-destroy --name $name`
-* List all containers, with running state and IP address: `lxc-ls -f`
- * alternatively, there is this script: `~/scripts/listcontainers.sh` which works even on CentOS where python3 is not (yet) available
+* Containers are created in `/var/lib/lxd/containers/$name`, see the file `config` and the directory `rootfs`
+* Start a container: `lxc start $name`
+* Start a container with console: `lxc console $name`
+* Attach to the container: `lxc exec $name -- /bin/bash`
+* Stop a container: `lxc stop $name`
+* Destroy a container: `lxc delete $name`
+* List all containers, with running state and IP address: `lxc list`
+ * alternatively, there is this script: `~/scripts/listcontainers.sh`
  * this also shows the OS of the container
  * ~/scripts/listcontainers.sh running: shows only running containers
  * ~/scripts/listcontainers.sh stopped: shows only stopped containers
 * Stop all containers: `~/scripts/stopall.sh`
-
-Snapshots:
-* are stored in `/var/lib/lxcsnaps/`
-* first stop the container: `lxc-stop -n $name`
-* then create the snapshot: `lxc-snapshot -n $name`
- * create with comment: `echo "mycomment" > /tmp/comment && lxc-snapshot -n $name -c /tmp/comment && rm -f /tmp/comment`
-* list all snapshots: `lxc-snapshot -LC -n $name`
-* restore a snapshot: `lxc-snapshot -n $name -r snap@`
-* create a new container from snapshot: `lxc-snapshot -n $name -r snap@ new$name`
-* delete a snapshot: `lxc-snapshot -n $name -d snap@`

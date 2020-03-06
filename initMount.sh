@@ -10,11 +10,11 @@ hostpath=$1
 containername=$2
 localpath=$3
 relativepath=${localpath:1}
-containerpath=/var/lib/lxc/$containername/rootfs/$relativepath
+containerpath=/var/lib/lxd/containers/$containername/rootfs/$relativepath
+mountname="${relativepath//\//_}"
 
 mkdir -p $hostpath
 rm -Rf $containerpath
 mkdir -p $containerpath
 
-echo "lxc.mount.entry = $hostpath $relativepath none defaults,bind 0 0" >> /var/lib/lxc/$containername/config
-
+lxc config device add $containername $mountname disk source=$hostpath/ path=$localpath

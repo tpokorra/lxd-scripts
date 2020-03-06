@@ -24,13 +24,13 @@ rootfs_path=$1
 
 function configure_autostart {
 autostart=$1
-rootfs_path=$2
+name=$2
 
   if [ $autostart -eq 1 ]
   then
-    # make sure the container starts at next boot time
-    echo "lxc.start.auto = 1" >> $rootfs_path/../config
-    echo "lxc.start.delay = 5" >> $rootfs_path/../config
+    lxc config set $name boot.autostart true
+  else
+    lxc config set $name boot.autostart false
   fi
 }
 
@@ -76,35 +76,12 @@ function getOutwardInterface {
 }
 
 function getBridgeInterface {
-  # interface can be lxcbr0 (Ubuntu) or virbr0 (Fedora)
-  local interface=lxcbr0
-  local interfaces=`ip a | grep $interface`
-  if [ -z "$interfaces" ]
-  then
-    interface=virbr0
-  fi
-  local interfaces=`ip a | grep $interface`
-  if [ -z "$interfaces" ]
-  then
-    return -1
-  fi
-  echo $interface
+  echo "lxdbr0"
 }
 
 function getIPOfInterface {
 interface=$1
-  # Ubuntu
-  local HostIP=`ip a | grep ${interface} | grep "inet addr" | awk '{ print $2 }' | awk -F ':' '{ print $2 }'`
-  if [ -z "$HostIP" ]
-  then
-    # Fedora, Ubuntu Bionic
-    HostIP=`ip a | grep ${interface} | grep "inet " | awk '{ print $2 }' | awk -F '/' '{ print $1 }'`
-  fi
-  if [ -z "$HostIP" ]
-  then
-    return -1
-  fi
-  echo $HostIP
+  echo "10.0.4.1"
 }
 
 function getOSOfContainer {

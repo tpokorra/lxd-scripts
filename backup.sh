@@ -10,10 +10,10 @@ backuphost=$1
 username=$2
 thishost=`hostname`
 
-for d in /var/lib/lxc/*
+for d in /var/lib/lxd/containers/*
 do
   putcmd="$putcmd 
-put ${d}/config lxc/`basename $d`.config"
+put ${d}/config lxc/`basename $d`.yaml"
 done
 
 echo "put /etc/iptables.rules

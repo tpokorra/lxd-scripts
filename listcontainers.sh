@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPTSPATH=/usr/share/lxc-scripts
+SCRIPTSPATH=/usr/share/lxd-scripts
 if [[ "$0" == "./listcontainers.sh" ]]
 then
   SCRIPTSPATH=`dirname ${BASH_SOURCE[0]}`
@@ -17,7 +17,7 @@ tmpfile=/tmp/listcontainers.txt
 echo "--" > $tmpfile
 echo -e "Name\t IP\t State\t Autostart\t Guest OS" >> $tmpfile
 echo "--" >> $tmpfile
-for d in /var/lib/lxc/*
+for d in /var/lib/lxd/containers/*
 do
   rootfs=$d/rootfs
 
@@ -31,25 +31,21 @@ do
   # version=getOSOfContainer
   getOSOfContainer $rootfs
 
-  if [[ -z "`lxc-ls --running $name`" ]]
+  if [[ -z "`lxc list $name | grep RUNNING`" ]]
   then
     state="stopped"
   else
     state="running"
   fi
 
-  if [ -z "`cat /var/lib/lxc/$name/config | grep lxc.start.auto | grep 1`" ]
+  if [[ "true" == "`lxc config get $name boot.autostart`" ]]
   then
-    autostart="no"
-  else
     autostart="yes"
+  else
+    autostart="no"
   fi
 
-  IPv4=`cat /var/lib/lxc/$name/config | grep "lxc.network.ipv4=" | awk -F= '{ print $2 }' | awk -F/ '{ print $1 }'`
-  if [ -z $IPv4 ]; then
-    # lxc3
-    IPv4=`cat /var/lib/lxc/$name/config | grep "lxc.net.0.ipv4.address =" | awk -F= '{ print $2 }' | awk -F/ '{ print $1 }'`
-  fi
+  IPv4=`lxc list $name -c 4 --format csv`
 
   if [[ "$show" == "all" || "$show" == "$state" ]]
   then

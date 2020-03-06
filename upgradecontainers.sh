@@ -33,18 +33,18 @@ else
 fi
 
 errors=
-for d in /var/lib/lxc/*
+for d in /var/lib/lxd/containers/*
 do
   container=`basename $d`
 
   # if the container does not have autostart enabled, don't upgrade it
   # we don't want to upgrade temporary or development containers
-  if [ -z "`cat /var/lib/lxc/$container/config | grep lxc.start.auto | grep 1`" ]
+  if [[ "false" == "`lxc config get $name boot.autostart`" ]]
   then
     continue
   fi
 
-  if [[ -z "`lxc-ls --running $name`" ]]
+  if [[ -z "`lxc list $name | grep RUNNING`" ]]
   then
       # stopped. do not upgrade, potential problems with mysql updates etc.
       continue
@@ -62,16 +62,16 @@ do
   error=0
   if [[ "$OS" == "CentOS" ]]
   then
-    (lxc-attach -n $name -- yum -y update ) || error=1
+    (lxc exec $name -- yum -y update ) || error=1
   elif [[ "$OS" == "Fedora" ]]
   then
-    (lxc-attach -n $name -- dnf -y update ) || error=1
+    (lxc exec $name -- dnf -y update ) || error=1
   elif [[ "$OS" == "Ubuntu" ]]
   then
-    chroot $rootfs bash -c 'LANG=C; apt-get update && apt-get -y upgrade || exit -1' || error=1
+    (lxc exec $name -- /bin/bash -c 'LANG=C; apt-get update && apt-get -y upgrade || exit -1') || error=1
   elif [[ "$OS" == "Debian" ]]
   then
-    chroot $rootfs bash -c 'LANG=C; apt-get update && apt-get -y upgrade || exit -1' || error=1
+    (lxc exec $name -- /bin/bash -c 'LANG=C; apt-get update && apt-get -y upgrade || exit -1') || error=1
   else
     echo "unknown operating system in container " $container
     exit -1
