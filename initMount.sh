@@ -18,4 +18,7 @@ chmod -R a+rwx $hostpath
 rm -Rf $containerpath
 mkdir -p $containerpath
 
+# see https://stgraber.org/2017/06/15/custom-user-mappings-in-lxd-containers/
+# you will only be able to write to the mounted directory, if it allows writing for other.
+# it will be owned by user and group nobody, uid 65534
 lxc config device add $containername $mountname disk source=$hostpath/ path=$localpath
