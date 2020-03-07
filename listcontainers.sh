@@ -46,6 +46,7 @@ do
   fi
 
   IPv4=`lxc list $name -c 4 --format csv`
+  IPv4=`cat /var/lib/lxd/networks/lxdbr0/dnsmasq.hosts/$name | awk -F"," '{print $2}'`
 
   if [[ "$show" == "all" || "$show" == "$state" ]]
   then
