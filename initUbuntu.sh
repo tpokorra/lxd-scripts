@@ -62,3 +62,5 @@ install_public_keys $rootfs_path $name
 configure_autostart $autostart $name
 
 info $cid $name $IPv4
+
+lxc stop $name
