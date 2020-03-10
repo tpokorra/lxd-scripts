@@ -57,6 +57,11 @@ echo "export LANG=C" >> $rootfs_path/etc/profile
 # install openssh-server
 lxc start $name
 sleep 10
+
+# we need to get the ip address. issues with cgroup v2?
+# see https://stackoverflow.com/questions/59535007/how-to-fix-network-issues-with-lxd-on-fedora-31
+lxc exec $name -- /bin/bash -c "dhclient eth0"
+
 lxc exec $name -- /bin/bash -c "dnf -y install openssh-server"
 lxc exec $name -- /bin/bash -c "dnf -y install glibc-locale-source glibc-all-langpacks"
 
