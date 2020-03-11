@@ -38,6 +38,10 @@ lxc init images:$distro/$release/$arch $name
 sed -i "s/,/,$IPv4,/g" /var/lib/lxd/networks/lxdbr0/dnsmasq.hosts/$name
 sudo killall -SIGHUP dnsmasq
 
+# fix issue with mariadb on Debian Buster
+# mariadb.service: Failed to set up mount namespacing: Permission denied
+lxc config set $name security.nesting true
+
 ssh-keygen -f "/root/.ssh/known_hosts" -R $IPv4
 
 # mount apt cache repo, to avoid redownloading stuff when reinstalling the machine
