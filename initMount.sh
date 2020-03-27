@@ -22,6 +22,6 @@ mkdir -p $containerpath
 # see https://discuss.linuxcontainers.org/t/mount-a-folder-in-host-into-lxd-container-nogroup-nobody-in-the-container/6341
 mkdir -p $hostpath
 chmod -R a+rwx $hostpath
-chown -R 1000000.1000000 $hostpath
+chown -R 100000.100000 $hostpath
 
 lxc config device add $containername $mountname disk source=$hostpath/ path=$localpath
