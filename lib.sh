@@ -82,7 +82,9 @@ function getBridgeInterface {
 
 function getIPOfInterface {
 interface=$1
-  echo "10.0.4.1"
+  # works on Ubuntu 18.04
+  local HostIP=`ip a show ${interface} | grep "inet" | awk '{ print $2 }' | awk -F '/' '{ print $1 }'`
+  echo "$HostIP"
 }
 
 function getOSOfContainer {
