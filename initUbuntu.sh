@@ -8,7 +8,7 @@ release="bionic"
 if [ -z $2 ]
 then
   echo "please call $0 <name of new container> <cid> <release, default is $release> <arch, default is amd64> <autostart, default is 1>"
-  echo "   eg. $0 50-$distro-mymachine 50"
+  echo "   eg. $0 mymachine.example.org 50"
   exit 1
 fi
 name=$1
@@ -27,6 +27,10 @@ if [ ! -z $5 ]
 then
   autostart=$5
 fi
+
+origname=$name
+name=$(createContainerName $name $cid)
+hostname=$(createHostName $origname $cid)
 
 rootfs_path=/var/lib/lxd/containers/$name/rootfs
 bridgeInterface=$(getBridgeInterface)
@@ -52,6 +56,7 @@ sleep 5
 
 # install openssh-server
 lxc exec $name -- /bin/bash -c "apt-get update && apt-get install -y openssh-server"
+lxc exec $name -- /bin/bash -c "hostnamectl set-hostname $hostname"
 
 # drop root password completely
 chroot $rootfs_path passwd -d root

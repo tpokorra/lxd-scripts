@@ -9,7 +9,7 @@ release="8"
 if [ -z $2 ]
 then
   echo "please call $0 <name of new container> <cid> <release, default is $release> <arch, default is amd64> <autostart, default is 1>"
-  echo "   eg. $0 l050-$distro-mymachine 50"
+  echo "   eg. $0 mymachine.example.org 50"
   exit 1
 fi
 name=$1
@@ -28,6 +28,10 @@ if [ ! -z $5 ]
 then
   autostart=$5
 fi
+
+origname=$name
+name=$(createContainerName $name $cid)
+hostname=$(createHostName $origname $cid)
 
 rootfs_path=/var/lib/lxd/containers/$name/rootfs
 bridgeInterface=$(getBridgeInterface) || die "cannot find the bridge interface"
@@ -55,6 +59,7 @@ sed -i 's/^keepcache=0/keepcache=1/g' $rootfs_path/etc/yum.conf
 lxc start $name
 sleep 5
 lxc exec $name -- /bin/bash -c "yum -y install openssh-server && systemctl enable sshd && systemctl start sshd"
+lxc exec $name -- /bin/bash -c "hostnamectl set-hostname $hostname"
 
 # drop root password completely
 lxc exec $name -- passwd -d root

@@ -116,3 +116,38 @@ rootfs=$1
     OSRelease=`echo $OSRelease | awk -F. '{print $1}'`
   fi
 }
+
+function createContainerName {
+name=$1
+cid=$2
+
+  # cannot have dots in the name, replace with hyphen
+  name="${name//\./-}"
+
+  # we let the name start with the digit, to make it easier to look at the list
+  if [[ ! $name = l$cid* && ! $name = $cid* ]]
+  then
+    name='l'`printf "%03d" $cid`-$name
+  fi
+
+  # must not start with a digit
+  if [[ ! $name = l* ]]
+  then
+    name='l'$name
+  fi
+
+  echo $name
+}
+
+function createHostName {
+name=$1
+cid=$2
+
+  # we let the name start with the digit, to make it easier to look at the list
+  if [[ ! $name = l$cid* && ! $name = $cid* ]]
+  then
+    name='l'`printf "%03d" $cid`-$name
+  fi
+
+  echo $name
+}
