@@ -125,7 +125,7 @@ cid=$2
   name="${name//\./-}"
 
   # we let the name start with the digit, to make it easier to look at the list
-  if [[ ! $name = l$cid* && ! $name = $cid* ]]
+  if [[ ! $name = l$cid* && ! $name = $cid* && ! $name = l`printf "%03d" $cid`* ]]
   then
     name='l'`printf "%03d" $cid`-$name
   fi
@@ -144,7 +144,7 @@ name=$1
 cid=$2
 
   # we let the name start with the digit, to make it easier to look at the list
-  if [[ ! $name = l$cid* && ! $name = $cid* ]]
+  if [[ ! $name = l$cid* && ! $name = $cid* && ! $name = l`printf "%03d" $cid`* ]]
   then
     name='l'`printf "%03d" $cid`-$name
   fi
