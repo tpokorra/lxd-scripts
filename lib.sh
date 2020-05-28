@@ -1,5 +1,15 @@
 #!/bin/bash
 
+export container_path=/var/lib/lxd/containers
+if [ ! -d $container_path ]; then
+  export container_path=/var/snap/lxd/common/lxd/storage-pools/default/containers
+fi
+
+export lxdbr0_path=/var/lib/lxd/networks/lxdbr0
+if [ ! -d $lxdbr0_path ]; then
+  export lxdbr0_path=/var/snap/lxd/common/lxd/networks/lxdbr0
+fi
+
 function install_public_keys {
 rootfs_path=$1
 name=$2

@@ -1,16 +1,17 @@
 #!/bin/bash
 
-if [ -z $3 ]
+if [ -z $4 ]
 then
-  echo "please call $0 <hostpath> <containername> <localpath>"
+  echo "please call $0 <hostpath> <rootfspath> <containername> <localpath>"
   exit 1
 fi
 
 hostpath=$1
-containername=$2
-localpath=$3
+rootfspath=$2
+containername=$3
+localpath=$4
 relativepath=${localpath:1}
-containerpath=/var/lib/lxd/containers/$containername/rootfs/$relativepath
+containerpath=${rootfspath}/$relativepath
 mountname="${relativepath//\//_}"
 
 rm -Rf $containerpath

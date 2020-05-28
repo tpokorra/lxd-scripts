@@ -17,7 +17,7 @@ tmpfile=/tmp/listcontainers.txt
 echo "--" > $tmpfile
 echo -e "Name\t IP\t State\t Autostart\t Guest OS" >> $tmpfile
 echo "--" >> $tmpfile
-for d in /var/lib/lxd/containers/*
+for d in $container_path/*
 do
   rootfs=$d/rootfs
 
@@ -46,7 +46,7 @@ do
   fi
 
   IPv4=`lxc list $name -c 4 --format csv`
-  IPv4=`cat /var/lib/lxd/networks/lxdbr0/dnsmasq.hosts/$name | awk -F"," '{print $2}'`
+  IPv4=`cat $lxdbr0_path/dnsmasq.hosts/$name | awk -F"," '{print $2}'`
 
   if [[ "$show" == "all" || "$show" == "$state" ]]
   then

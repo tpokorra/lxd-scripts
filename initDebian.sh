@@ -32,15 +32,15 @@ origname=$name
 name=$(createContainerName $name $cid)
 hostname=$(createHostName $origname $cid)
 
-rootfs_path=/var/lib/lxd/containers/$name/rootfs
+rootfs_path=$container_path/$name/rootfs
 bridgeInterface=$(getBridgeInterface)
 bridgeAddress=$(getIPOfInterface $bridgeInterface)
 networkAddress=$(echo $bridgeAddress | awk -F '.' '{ print $1"."$2"."$3 }')
 IPv4=$networkAddress.$cid
 
 lxc init images:$distro/$release/$arch $name
-sed -i "s/,/,$IPv4,/g" /var/lib/lxd/networks/lxdbr0/dnsmasq.hosts/$name
-sudo killall -SIGHUP dnsmasq
+lxc network attach lxdbr0 $name eth0 eth0
+lxc config device set $name eth0 ipv4.address $IPv4
 
 # fix issue with mariadb on Debian Buster
 # mariadb.service: Failed to set up mount namespacing: Permission denied
@@ -50,7 +50,7 @@ ssh-keygen -f "/root/.ssh/known_hosts" -R $IPv4
 
 # mount apt cache repo, to avoid redownloading stuff when reinstalling the machine
 hostpath="/var/lib/repocache/$cid/$distro/$release/$arch/var/cache/apt"
-$SCRIPTSPATH/initMount.sh $hostpath $name "/var/cache/apt"
+$SCRIPTSPATH/initMount.sh $hostpath $rootfs_path $name "/var/cache/apt"
 
 # configure timezone
 cd $rootfs_path/etc; rm -f localtime; ln -s ../usr/share/zoneinfo/Europe/Berlin localtime; cd -

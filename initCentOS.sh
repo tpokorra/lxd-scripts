@@ -33,21 +33,21 @@ origname=$name
 name=$(createContainerName $name $cid)
 hostname=$(createHostName $origname $cid)
 
-rootfs_path=/var/lib/lxd/containers/$name/rootfs
+rootfs_path=$container_path/$name/rootfs
 bridgeInterface=$(getBridgeInterface) || die "cannot find the bridge interface"
 bridgeAddress=$(getIPOfInterface $bridgeInterface) || die "cannot find the address for the bridge $bridgeInterface"
 networkAddress=$(echo $bridgeAddress | cut -f1,2,3 -d".")
 IPv4=$networkAddress.$cid
 
 lxc init images:$distro/$release/$arch $name
-sed -i "s/,/,$IPv4,/g" /var/lib/lxd/networks/lxdbr0/dnsmasq.hosts/$name
-sudo killall -SIGHUP dnsmasq
+lxc network attach lxdbr0 $name eth0 eth0
+lxc config device set $name eth0 ipv4.address $IPv4
 
 ssh-keygen -f "/root/.ssh/known_hosts" -R $IPv4
 
 # mount yum cache repo, to avoid redownloading stuff when reinstalling the machine
 hostpath="/var/lib/repocache/$cid/$distro/$release/$arch/var/cache/yum"
-$SCRIPTSPATH/initMount.sh $hostpath $name "/var/cache/yum"
+$SCRIPTSPATH/initMount.sh $hostpath $rootfs_path $name "/var/cache/yum"
 
 # configure timezone
 cd $rootfs_path/etc; rm -f localtime; ln -s ../usr/share/zoneinfo/Europe/Berlin localtime; cd -
