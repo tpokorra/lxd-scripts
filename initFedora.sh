@@ -43,6 +43,10 @@ lxc init images:$distro/$release/$arch $name
 lxc network attach lxdbr0 $name eth0 eth0
 lxc config device set $name eth0 ipv4.address $IPv4
 
+# fix issue with mariadb on Fedora 32
+# mariadb.service: Failed to set up mount namespacing: Permission denied
+lxc config set $name security.nesting true
+
 ssh-keygen -f "/root/.ssh/known_hosts" -R $IPv4
 
 # mount yum cache repo, to avoid redownloading stuff when reinstalling the machine
