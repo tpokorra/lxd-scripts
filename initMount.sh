@@ -1,15 +1,18 @@
 #!/bin/bash
 
-if [ -z $4 ]
+SCRIPTSPATH=`dirname ${BASH_SOURCE[0]}`
+source $SCRIPTSPATH/lib.sh
+
+if [ -z $3 ]
 then
-  echo "please call $0 <hostpath> <rootfspath> <containername> <localpath>"
+  echo "please call $0 <hostpath> <containername> <localpath>"
   exit 1
 fi
 
 hostpath=$1
-rootfspath=$2
-containername=$3
-localpath=$4
+containername=$2
+localpath=$3
+rootfs_path=$container_path/$containername/rootfs
 relativepath=${localpath:1}
 containerpath=${rootfspath}/$relativepath
 mountname="${relativepath//\//_}"

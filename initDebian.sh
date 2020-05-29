@@ -50,7 +50,7 @@ ssh-keygen -f "/root/.ssh/known_hosts" -R $IPv4
 
 # mount apt cache repo, to avoid redownloading stuff when reinstalling the machine
 hostpath="/var/lib/repocache/$cid/$distro/$release/$arch/var/cache/apt"
-$SCRIPTSPATH/initMount.sh $hostpath $rootfs_path $name "/var/cache/apt"
+$SCRIPTSPATH/initMount.sh $hostpath $name "/var/cache/apt"
 
 # configure timezone
 cd $rootfs_path/etc; rm -f localtime; ln -s ../usr/share/zoneinfo/Europe/Berlin localtime; cd -
