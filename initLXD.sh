@@ -36,6 +36,7 @@ lxc network create lxdbr0 ipv6.address=none ipv4.address=10.0.4.1/24 ipv4.nat=tr
 
 if [[ "$OS" == "CentOS" || "$OS" == "Fedora" ]]
 then
+  dnf install -y crontabs
   systemctl enable crond || exit -1
   systemctl start crond || exit -1
   firewall-cmd --permanent --zone=trusted --change-interface=lxdbr0
