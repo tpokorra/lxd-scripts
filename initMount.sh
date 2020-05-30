@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPTSPATH=`dirname ${BASH_SOURCE[0]}`
+source $SCRIPTSPATH/lib.sh
+
 if [ -z $3 ]
 then
   echo "please call $0 <hostpath> <containername> <localpath>"
@@ -9,8 +12,9 @@ fi
 hostpath=$1
 containername=$2
 localpath=$3
+rootfs_path=$container_path/$containername/rootfs
 relativepath=${localpath:1}
-containerpath=/var/lib/lxd/containers/$containername/rootfs/$relativepath
+containerpath=${rootfspath}/$relativepath
 mountname="${relativepath//\//_}"
 
 rm -Rf $containerpath

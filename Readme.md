@@ -24,7 +24,8 @@ CheatSheet for my LXD scripts
 * Create a container (with networking etc): `~/scripts/initFedora.sh $name $id`
  * Call the script without parameters to see additional parameters, eg to specify the version of the OS etc: `~/scripts/initFedora.sh`
  * There are scripts for creating Fedora, CentOS, Debian, and Ubuntu containers
-* Containers are created in `/var/lib/lxd/containers/$name`, see the file `config` and the directory `rootfs`
+* Containers are created in `/var/lib/lxd/containers/$name`, see the directory `rootfs`
+* or with the LXD snap, see `/var/snap/lxd/common/lxd/storage-pools/default/containers/`
 * Start a container: `lxc start $name`
 * Start a container with console: `lxc console $name`
 * Attach to the container: `lxc exec $name -- /bin/bash`

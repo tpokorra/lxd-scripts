@@ -4,7 +4,7 @@ SCRIPTSPATH=`dirname ${BASH_SOURCE[0]}`
 source $SCRIPTSPATH/lib.sh
 
 distro="fedora"
-release="31"
+release="32"
 
 if [ -z $2 ]
 then
@@ -33,15 +33,19 @@ origname=$name
 name=$(createContainerName $name $cid)
 hostname=$(createHostName $origname $cid)
 
-rootfs_path=/var/lib/lxd/containers/$name/rootfs
+rootfs_path=$container_path/$name/rootfs
 bridgeInterface=$(getBridgeInterface) || die "cannot find the bridge interface"
 bridgeAddress=$(getIPOfInterface $bridgeInterface) || die "cannot find the address for the bridge $bridgeInterface"
 networkAddress=$(echo $bridgeAddress | cut -f1,2,3 -d".")
 IPv4=$networkAddress.$cid
 
 lxc init images:$distro/$release/$arch $name
-sed -i "s/,/,$IPv4,/g" /var/lib/lxd/networks/lxdbr0/dnsmasq.hosts/$name
-sudo killall -SIGHUP dnsmasq
+lxc network attach lxdbr0 $name eth0 eth0
+lxc config device set $name eth0 ipv4.address $IPv4
+
+# fix issue with mariadb on Fedora 32
+# mariadb.service: Failed to set up mount namespacing: Permission denied
+lxc config set $name security.nesting true
 
 ssh-keygen -f "/root/.ssh/known_hosts" -R $IPv4
 
@@ -61,10 +65,6 @@ echo "export LANG=C" >> $rootfs_path/etc/profile
 # install openssh-server
 lxc start $name
 sleep 10
-
-# we need to get the ip address. issues with cgroup v2?
-# see https://stackoverflow.com/questions/59535007/how-to-fix-network-issues-with-lxd-on-fedora-31
-lxc exec $name -- /bin/bash -c "dhclient eth0"
 
 lxc exec $name -- /bin/bash -c "dnf -y install openssh-server"
 lxc exec $name -- /bin/bash -c "dnf -y install glibc-locale-source glibc-all-langpacks"
