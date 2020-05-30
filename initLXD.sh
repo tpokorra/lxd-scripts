@@ -38,6 +38,10 @@ if [[ "$OS" == "CentOS" || "$OS" == "Fedora" ]]
 then
   systemctl enable crond || exit -1
   systemctl start crond || exit -1
+  firewall-cmd --permanent --zone=trusted --change-interface=lxdbr0
+  # allow DNS
+  firewall-cmd --permanent --zone=trusted --add-port=53/tcp
+  firewall-cmd --reload
 elif [[ "$OS" == "Debian" || "$OS" == "Ubuntu" ]]
 then
   systemctl enable cron || exit -1
