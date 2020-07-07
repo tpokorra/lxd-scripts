@@ -50,7 +50,7 @@ hostpath="/var/lib/repocache/$cid/$distro/$release/$arch/var/cache/yum"
 $SCRIPTSPATH/initMount.sh $hostpath $name "/var/cache/yum"
 
 # configure timezone
-cd $rootfs_path/etc; rm -f localtime; ln -s ../usr/share/zoneinfo/Europe/Berlin localtime; cd -
+cd $rootfs_path/etc && rm -f localtime && ln -s ../usr/share/zoneinfo/Europe/Berlin localtime && cd -
 
 # yum: keep the cache
 sed -i 's/^keepcache=0/keepcache=1/g' $rootfs_path/etc/yum.conf

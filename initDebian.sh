@@ -53,7 +53,7 @@ hostpath="/var/lib/repocache/$cid/$distro/$release/$arch/var/cache/apt"
 $SCRIPTSPATH/initMount.sh $hostpath $name "/var/cache/apt"
 
 # configure timezone
-cd $rootfs_path/etc; rm -f localtime; ln -s ../usr/share/zoneinfo/Europe/Berlin localtime; cd -
+cd $rootfs_path/etc && rm -f localtime && ln -s ../usr/share/zoneinfo/Europe/Berlin localtime && cd -
 
 lxc start $name
 sleep 5
