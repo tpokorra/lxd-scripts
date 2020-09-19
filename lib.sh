@@ -1,8 +1,11 @@
 #!/bin/bash
 
-export container_path=/var/lib/lxd/containers
+export container_path=/var/snap/lxd/common/lxd/storage-pools/default/containers
 if [ ! -d $container_path ]; then
-  export container_path=/var/snap/lxd/common/lxd/storage-pools/default/containers
+  export container_path=/var/lib/lxd/containers
+fi
+if [ ! -d $container_path ]; then
+  export container_path=/var/snap/lxd/common/lxd/containers/
 fi
 
 export lxdbr0_path=/var/lib/lxd/networks/lxdbr0
