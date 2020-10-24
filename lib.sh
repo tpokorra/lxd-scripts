@@ -79,11 +79,12 @@ function getOutwardInterface {
   if [ -z $interface ]
   then
     interface=`ip route|grep default | head -n 1 | awk '{print $8}'`
+    if [[ "$interface" -eq "onlink" ]]; then
+      interface=""
+    fi
   fi
-  bionic=`cat /etc/lsb-release  | grep bionic`
-  if [ ! -z $bionic ]
+  if [ -z $interface ]
   then
-    # Ubuntu Bionic
     interface=`ip route|grep default | head -n 1 | awk '{print $5}'`
   fi
   echo $interface
