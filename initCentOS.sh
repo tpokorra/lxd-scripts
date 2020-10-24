@@ -46,8 +46,8 @@ lxc config device set $name eth0 ipv4.address $IPv4
 ssh-keygen -f "/root/.ssh/known_hosts" -R $IPv4
 
 # mount yum cache repo, to avoid redownloading stuff when reinstalling the machine
-hostpath="/var/lib/repocache/$cid/$distro/$release/$arch/var/cache/yum"
-$SCRIPTSPATH/initMount.sh $hostpath $name "/var/cache/yum"
+#hostpath="/var/lib/repocache/$cid/$distro/$release/$arch/var/cache/yum"
+#$SCRIPTSPATH/initMount.sh $hostpath $name "/var/cache/yum"
 
 # configure timezone
 cd $rootfs_path/etc && rm -f localtime && ln -s ../usr/share/zoneinfo/Europe/Berlin localtime && cd -
