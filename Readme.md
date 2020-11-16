@@ -31,6 +31,7 @@ CheatSheet for my LXD scripts
 * Attach to the container: `lxc exec $name -- /bin/bash`
 * Stop a container: `lxc stop $name`
 * Destroy a container: `lxc delete $name`
+* Enable Auto-start for a container: `lxc config set $name boot.autostart true`
 * List all containers, with running state and IP address: `lxc list`
  * alternatively, there is this script: `~/scripts/listcontainers.sh`
  * this also shows the OS of the container
