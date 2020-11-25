@@ -7,8 +7,16 @@ Installation
 ------------
 
 * Either clone this code repository: `cd ~; git clone https://github.com/tpokorra/lxd-scripts.git scripts`
+* You need to install these dependencies:
+
+    # For Ubuntu:
+    apt-get install lxd lxd-client lxc-utils cgroup-lite python3-lxc bsdmainutils cron patch debootstrap
+
+    # For Fedora:
+    dnf install lxd lxd-client lxc-utils gpg libvirt tar rsync net-tools debootstrap crontabs
+
 * Or install a package from LBS: https://lbs.solidcharity.com/package/tpokorra/lbs/lxd-scripts
- * There is a lxd-scripts package for Ubuntu 18.04, with instructions how to install the package
+ * There is a lxd-scripts package for Ubuntu 18.04 (Bionic) and Ubuntu 20.04 (Focal), and latest Fedora, with instructions how to install the package
  * To make things easier, I usually create a symbolic link: `cd ~; ln -s /usr/share/lxd-scripts scripts`
 
 After installing the package, run these scripts for initializing the firewall and LXD:
