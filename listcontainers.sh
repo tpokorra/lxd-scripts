@@ -13,6 +13,7 @@ then
   show=$1
 fi
 
+echo "container path: $container_path"
 tmpfile=/tmp/listcontainers.txt
 echo "--" > $tmpfile
 echo -e "Name\t IP\t State\t Autostart\t Guest OS" >> $tmpfile
