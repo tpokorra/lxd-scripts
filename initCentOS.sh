@@ -4,7 +4,7 @@ SCRIPTSPATH=`dirname ${BASH_SOURCE[0]}`
 source $SCRIPTSPATH/lib.sh
 
 distro="centos"
-release="8"
+release="8-Stream"
 
 if [ -z $2 ]
 then
