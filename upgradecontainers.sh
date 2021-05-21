@@ -33,7 +33,7 @@ else
 fi
 
 errors=
-for d in /var/lib/lxd/containers/*
+for d in $container_path/*
 do
   container=`basename $d`
 
