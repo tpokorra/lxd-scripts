@@ -1,7 +1,8 @@
 #!/bin/bash
 
 SCRIPTSPATH=/usr/share/lxd-scripts
-if [[ "$0" == "./listcontainers.sh" ]]
+
+if [[ ! -f $SCRIPTSPATH/lib.sh ]]
 then
   SCRIPTSPATH=`dirname ${BASH_SOURCE[0]}`
 fi
