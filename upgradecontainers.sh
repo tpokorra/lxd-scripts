@@ -39,12 +39,12 @@ do
 
   # if the container does not have autostart enabled, don't upgrade it
   # we don't want to upgrade temporary or development containers
-  if [[ "false" == "`lxc config get $name boot.autostart`" ]]
+  if [[ "false" == "`lxc config get $container boot.autostart`" ]]
   then
     continue
   fi
 
-  if [[ -z "`lxc list $name | grep RUNNING`" ]]
+  if [[ -z "`lxc list $container | grep RUNNING`" ]]
   then
       # stopped. do not upgrade, potential problems with mysql updates etc.
       continue
