@@ -58,6 +58,7 @@ sed -i 's/^keepcache=0/keepcache=1/g' $rootfs_path/etc/yum.conf
 # install openssh-server
 lxc start $name
 sleep 5
+lxc exec $name -- dhclient
 lxc exec $name -- /bin/bash -c "yum -y install openssh-server && systemctl enable sshd && systemctl start sshd"
 lxc exec $name -- /bin/bash -c "hostnamectl set-hostname $hostname"
 
