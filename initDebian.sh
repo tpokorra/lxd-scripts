@@ -3,7 +3,7 @@ SCRIPTSPATH=`dirname ${BASH_SOURCE[0]}`
 source $SCRIPTSPATH/lib.sh
 
 distro="debian"
-release="buster"
+release="bullseye"
 
 if [ -z $2 ]
 then
