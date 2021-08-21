@@ -5,6 +5,10 @@ if [[ ! -f $SCRIPTSPATH/lib.sh ]]
 then
   SCRIPTSPATH=`dirname ${BASH_SOURCE[0]}`
 fi
+if [[ ! -f $SCRIPTSPATH/lib.sh ]]
+then
+  SCRIPTSPATH=/root/lxd-scripts
+fi
 source $SCRIPTSPATH/lib.sh
 
 show="all"
