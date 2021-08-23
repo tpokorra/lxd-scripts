@@ -59,6 +59,7 @@ lxc start $name
 sleep 5
 
 # install openssh-server
+lxc exec $name -- dhclient
 lxc exec $name -- /bin/bash -c "apt-get update && apt-get install -y openssh-server"
 lxc exec $name -- /bin/bash -c "hostnamectl set-hostname $hostname"
 
