@@ -22,6 +22,10 @@ echo "bridge address:" $bridgeAddress
 cid=$1
 guestip=${bridgeAddress:0: -2}.$cid
 echo "guestip: "$guestip
+if [ -z $guestip ]
+then
+  exit -1
+fi
 port=$2
 remove=0
 
