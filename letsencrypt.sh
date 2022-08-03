@@ -17,11 +17,6 @@ then
   openssl genrsa 4096 > ~/letsencrypt/account.key
 fi
 
-if [ ! -f ~/letsencrypt/lets-encrypt-x3-cross-signed.pem ]
-then
-  wget https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem -O ~/letsencrypt/lets-encrypt-x3-cross-signed.pem
-fi
-
 if [ -z $1 ]
 then
   echo "specify which domain should get a new lets encrypt certificate, or all"
@@ -111,14 +106,13 @@ FINISH
   if [ $error -ne 1 ]
   then
     cp -f $domain.key /var/lib/certs/$domain.key
-    cat $domain.crt lets-encrypt-x3-cross-signed.pem > /var/lib/certs/$domain.crt
+    cp -f $domain.crt /var/lib/certs/$domain.crt
     if [ -d /var/lib/lxc/$cid-$domain ]
     then
       mkdir -p /var/lib/lxc/$cid-$domain/rootfs/var/lib/certs
       cp -f $domain.key /var/lib/lxc/$cid-$domain/rootfs/var/lib/certs/$cid-$domain.key
       cp -f $domain.crt /var/lib/lxc/$cid-$domain/rootfs/var/lib/certs/$cid-$domain.crt
       cp -f /var/lib/certs/$domain.crt /var/lib/lxc/$cid-$domain/rootfs/var/lib/certs/$cid-$domain.bundle.pem
-      cp -f lets-encrypt-x3-cross-signed.pem /var/lib/lxc/$cid-$domain/rootfs/var/lib/certs/$cid-$domain.ca-chain.pem
     fi
   fi
 

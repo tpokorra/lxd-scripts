@@ -54,7 +54,11 @@ do
     autostart="no"
   fi
 
-  IPv4=`cat $lxdbr0_path/dnsmasq.hosts/$name | awk -F"," '{print $2}'`
+  hostsfname="$lxdbr0_path/dnsmasq.hosts/$name"
+  if [ -f $hostsfname.eth0 ]; then
+    hostsfname=$hostsfname.eth0
+  fi
+  IPv4=`cat $hostsfname | awk -F"," '{print $2}'`
 
   if [[ "$show" == "all" || "$show" == "$state" ]]
   then
