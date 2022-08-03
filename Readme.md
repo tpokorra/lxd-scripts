@@ -11,7 +11,9 @@ Installation
 
 ```
 # For Ubuntu:
-apt-get install lxd lxd-client lxc-utils cgroup-lite python3-lxc bsdmainutils cron patch debootstrap
+apt-get install snapd
+snap install lxd
+apt-get install lxc-utils cgroup-lite python3-lxc bsdmainutils cron patch debootstrap
 ```
 
 ```
