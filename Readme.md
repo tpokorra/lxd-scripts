@@ -52,3 +52,5 @@ CheatSheet for my LXD scripts
  * ~/scripts/listcontainers.sh running: shows only running containers
  * ~/scripts/listcontainers.sh stopped: shows only stopped containers
 * Stop all containers: `~/scripts/stopall.sh`
+* Take a snapshot of a container: lxc snapshot $name clean
+* Restore a snapshot of a container: lxc restore $name clean
