@@ -4,7 +4,7 @@ SCRIPTSPATH=`dirname ${BASH_SOURCE[0]}`
 source $SCRIPTSPATH/lib.sh
 
 distro="fedora"
-release="37"
+release="38"
 
 if [ -z $2 ]
 then
