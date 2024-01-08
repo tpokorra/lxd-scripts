@@ -30,9 +30,10 @@ then
   ln -s /usr/share/lxd-scripts/listcontainers.sh /usr/bin/lc
 fi
 
-lxd init --auto
-lxc network delete lxdbr0
+# see https://documentation.ubuntu.com/lxd/en/latest/howto/network_create/
+# see https://documentation.ubuntu.com/lxd/en/latest/reference/network_bridge/#network-bridge
 lxc network create lxdbr0 ipv6.address=none ipv4.address=10.0.4.1/24 ipv4.nat=true
+lxd init --auto
 
 if [[ "$OS" == "CentOS" || "$OS" == "Fedora" ]]
 then
