@@ -38,7 +38,12 @@ bridgeAddress=$(getIPOfInterface $bridgeInterface)
 networkAddress=$(echo $bridgeAddress | awk -F '.' '{ print $1"."$2"."$3 }')
 IPv4=$networkAddress.$cid
 
-lxc init images:$distro/$release/$arch $name
+# create container with nesting
+lxc init images:$distro/$release/$arch $name \
+    -c security.nesting=true \
+    -c security.syscalls.intercept.mknod=true \
+    -c security.syscalls.intercept.setxattr=true
+
 lxc network attach lxdbr0 $name eth0 eth0
 lxc config device set $name eth0 ipv4.address $IPv4
 
